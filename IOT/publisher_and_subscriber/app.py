@@ -1,7 +1,6 @@
 from flask import Flask, request, jsonify, render_template
 
 app = Flask(__name__)
-
 data_store = {}
 
 @app.route('/')
@@ -11,8 +10,7 @@ def index():
 @app.route('/publish', methods=['POST'])
 def publish():
     content = request.json
-    publisher_id = content.get('publisher_id')
-    data = content.get('data')
+    publisher_id, data = content.get('publisher_id'), content.get('data')
     if not publisher_id or not data:
         return jsonify({'error': 'Invalid input'}), 400
     data_store[publisher_id] = data
@@ -21,13 +19,20 @@ def publish():
 @app.route('/subscribe/<publisher_id>', methods=['GET'])
 def subscribe(publisher_id):
     data = data_store.get(publisher_id)
-    if data is None:
-        return jsonify({'error': 'No data found for this publisher'}), 404
-    return jsonify({'data': data}), 200
+    return jsonify({'data': data}) if data else jsonify({'error': 'No data found'}), 404
 
 if __name__ == '__main__':
     app.run(debug=True)
 
 
+# for running
 # pip install Flask
+# /your-project-directory
+#     /templates
+#         index.html
+#     app.py
 # python app.py
+#  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+
+
+# app.run(debug=True, host='0.0.0.0', port=8080) if you encounter any error (optional)

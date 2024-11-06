@@ -1,61 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dashboard</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
-      rel="stylesheet"
-    />
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.5.0/flowbite.min.css"
-      rel="stylesheet"
-    />
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-      }
-    </style>
+    <title>Publisher-Subscriber</title>
   </head>
-  <body class="bg-gray-100">
-    <div class="container mx-auto p-4">
-      <h1 class="text-3xl font-bold mb-4">Publisher-Subscriber</h1>
-      <div class="mb-6">
-        <h2 class="text-xl font-semibold mb-2">Publish Data</h2>
-        <input
-          type="text"
-          id="publisherId"
-          placeholder="Publisher ID"
-          class="border p-2 rounded w-full mb-2"
-        />
-        <input
-          type="text"
-          id="data"
-          placeholder="Data"
-          class="border p-2 rounded w-full mb-2"
-        />
-        <button onclick="publish()" class="bg-blue-500 text-white p-2 rounded">
-          Publish
-        </button>
-      </div>
-      <div class="mb-6">
-        <h2 class="text-xl font-semibold mb-2">Subscribe to Data</h2>
-        <input
-          type="text"
-          id="subscribeId"
-          placeholder="Publisher ID"
-          class="border p-2 rounded w-full mb-2"
-        />
-        <button
-          onclick="subscribe()"
-          class="bg-green-500 text-white p-2 rounded"
-        >
-          Subscribe
-        </button>
-      </div>
-      <div id="dataDisplay" class="mt-4"></div>
+  <body>
+     <div>
+      <h2>Publish Data</h2>
+      <input type="text" id="publisherId" placeholder="Publisher ID" />
+      <input type="text" id="data" placeholder="Data" />
+      <button onclick="publish()">Publish</button>
     </div>
+
+    <div>
+      <h2>Subscribe to Data</h2>
+      <input type="text" id="subscribeId" placeholder="Publisher ID" />
+      <button onclick="subscribe()">Subscribe</button>
+    </div>
+
+    <div id="dataDisplay"></div>
+
     <script>
       function publish() {
         const publisherId = document.getElementById("publisherId").value;
@@ -66,24 +29,19 @@
           body: JSON.stringify({ publisher_id: publisherId, data: data }),
         })
           .then((response) => response.json())
-          .then((data) => alert("Data published successfully!"))
-          .catch((error) => console.error("Error:", error));
+          .then(() => alert("Data published"))
+          .catch(console.error);
       }
+
       function subscribe() {
         const publisherId = document.getElementById("subscribeId").value;
         fetch(`/subscribe/${publisherId}`)
           .then((response) => response.json())
           .then((data) => {
-            if (data.error) {
-              document.getElementById("dataDisplay").innerText = data.error;
-            } else {
-              document.getElementById("dataDisplay").innerText = `Data:
-${data.data}`;
-            }
+            document.getElementById("dataDisplay").innerText = data.error || `Data: ${data.data}`;
           })
-          .catch((error) => console.error("Error:", error));
+          .catch(console.error);
       }
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.5.0/flowbite.min.js"></script>
   </body>
 </html>

@@ -1,24 +1,16 @@
-int irSensorPin = 2;   // Connect the signal pin of the IR sensor to D2
-int ledPin = 13;       // Optional LED connected to D13 for indication
-
+int irSensor = 7;  
+int ledPin = 13;  
 void setup() {
-  pinMode(irSensorPin, INPUT);  // Set the IR sensor pin as input
-  pinMode(ledPin, OUTPUT);      // Set the LED pin as output (optional)
-  Serial.begin(9600);           // Begin serial communication for debugging
+  pinMode(irSensor, INPUT);  
+  pinMode(ledPin, OUTPUT); 
 }
 
 void loop() {
-  int objectDetected = digitalRead(irSensorPin);  // Read the IR sensor output
+  int sensorValue = digitalRead(irSensor); 
 
-  if (objectDetected == LOW) {
-    // Object detected (when the sensor output is LOW)
-    Serial.println("Object detected!");
-    digitalWrite(ledPin, HIGH);  // Turn on the LED (optional)
+  if (sensorValue == LOW) { 
+    digitalWrite(ledPin, HIGH);  
   } else {
-    // No object detected (when the sensor output is HIGH)
-    Serial.println("No object detected.");
-    digitalWrite(ledPin, LOW);   // Turn off the LED (optional)
+    digitalWrite(ledPin, LOW);  
   }
-
-  delay(500);  // Small delay for debounce and stability
 }
